@@ -1,17 +1,40 @@
-/* 
-
- */
- 
 #include <Servo.h> 
 #include <string.h>
 
+
+/* Ping Radar - Ultrasonic sonar project for arduino, processing and android.
+ * --------------------------------------------------------------------------
+ * Guide:
+ * --------------------------------------------------------------------------
+ * You will need: 
+ *    - PING))) or similar ultrasonic distance sensor readable by pulseIn
+ *    - A servo preferably with 180 degree movement
+ *    - Wires
+ *    - PC/Mac with processing OR a android device with USB Host support running android 3.0.1 or higher
+ *
+ *
+ * Connect the ultrasonic sensor (most models should work okay, it has to be a sensor readable by PulseIn())
+ * to gnd, vcc, (7) ping/trig and (8) echo pins (which may be the same if you are using a 3 pinned PING)) sensor or similar, in that case just change the PINOUT variables below)
+ *
+ */
+
+
+
+
 /* PIN OUT */
+#define TRIG_PIN 7
+#define ECHO_PIN 8
+#define SERVO_PIN 10
 
-const int pingPin = 7;      //Ping pin for the ultrasonic sensor
-const int echoPin = 8;      //Echo pin for the sensor, if you are using a ping)) sensor ping and echo pins are the same.
-const int servoPin = 10;    //Servo PWM pin
 
+
+
+
+/* Inches or CM ? */
 boolean INCHES = false;     //true: CM, false: INCHES
+
+
+
 
 int resolution = 180;
 int waitForServo = 50;
@@ -35,7 +58,7 @@ void setup() {
   Serial.write("Waiting for options...\n");
 
     
-  Serial.parseInt() // Wait for configuration flag
+  Serial.parseInt(); // Wait for configuration flag
   
   /* Parse settings from the application in the format of 1:int;int;int; */
   resolution  = Serial.parseInt();
@@ -43,7 +66,7 @@ void setup() {
   pingTimeout  = Serial.parseInt();  
   
   /* Attach servo */
-  myservo.attach(servoPin);
+  myservo.attach(SERVO_PIN);
   
 }
 
@@ -87,18 +110,18 @@ boolean measureDistance()
 
   // The PING))) is triggered by a HIGH pulse of 2 or more microseconds.
   // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
-  pinMode(pingPin, OUTPUT);
-  digitalWrite(pingPin, LOW);
+  pinMode(TRIG_PIN, OUTPUT);
+  digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(5);
-  digitalWrite(pingPin, HIGH);
+  digitalWrite(TRIG_PIN, HIGH);
   delayMicroseconds(10);
-  digitalWrite(pingPin, LOW);
+  digitalWrite(TRIG_PIN, LOW);
 
   // The same pin is used to read the signal from the PING))): a HIGH
   // pulse whose duration is the time (in microseconds) from the sending
   // of the ping to the reception of its echo off of an object.
-  pinMode(echoPin, INPUT);
-  duration = pulseIn(echoPin, HIGH,pingTimeout);
+  pinMode(ECHO_PIN, INPUT);
+  duration = pulseIn(ECHO_PIN, HIGH,pingTimeout);
 
  
 
